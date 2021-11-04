@@ -25,7 +25,7 @@ SECRET_KEY = 'r^^up6up(u3z5%ie!_#+$0@ux)wpllzpazc428mlqqzv8o2=#n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_spectacular',
     'app',
 ]
 
@@ -54,7 +55,8 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 ROOT_URLCONF = 'config.urls'
@@ -101,6 +103,39 @@ DATABASES = {
 #         },
 #     },
 # }
+LOGIN_URL = 'rest_framework:login'
+LOGOUT_URL = 'rest_framework:logout'
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
+    'PREPROCESSING_HOOKS': ['app.CustomSchema.custome_preprocessing'],
+    'POSTPROCESSING_HOOKS': ['app.CustomSchema.custome_postprocessing'],
+    'SERVE_PUBLIC': False,
+    'SWAGGER_UI_SETTINGS': {
+        'oauth2RedirectUrl': '127.0.0.1:8000/'
+    },
+    'SERVE_AUTHENTICATION': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'SWAGGER_SETTINGS':{
+        'SECURITY_DEFINITIONS': {
+            'basic': {
+                'type': 'basic'
+            }
+        },
+    }
+
+}
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
 
 
 
